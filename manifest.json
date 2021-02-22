@@ -1,0 +1,23 @@
+{
+"name":"HTTP security headers",
+"description": "Should examine the response headers and warn the user whether site is secure or not",
+"browser_action": {
+"default_popup": "popup.html"
+},
+"version":"1.0",
+"permissions":["webRequest", "tabs", "storage", "downloads", "notifications", "tabs"],
+"icons": {
+      "48": "48.png",
+      "96": "96.png"
+  },
+"background":{
+      "scripts":["background.js"]
+},
+"manifest_version":2
+}
+
+
+
+
+
+
