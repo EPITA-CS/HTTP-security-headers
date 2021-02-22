@@ -3,11 +3,15 @@ chrome.tabs.query({active: true, currentWindow: true},function(tab){
 recHeaders=grabheader.headers[tab[0].id];
 console.log(recHeaders);
 if(recHeaders.responseHeaders.find(a=>a.name.toLowerCase()==='content-security-policy'))
-document.getElementById("headerid").innerHTML+="CSP exists";
+main.innerHTML+="<td> Content-Security-Policy exists </td>"
+//document.getElementById("headerid").innerHTML+="CSP exists";
 else
-document.getElementById("headerid").innerHTML+="CSP missing";
+main.innerHTML+="<td> Content-Security-Policy missing </td>"
+//document.getElementById("headerid").innerHTML+="CSP missing";
 if(recHeaders.responseHeaders.find(a=>a.name.toLowerCase()==='strict-transport-security'))
-document.getElementById("headerid").innerHTML+="HSTS exists";
+main.innerHTML+="<td> HSTS exists </td>"
+//document.getElementById("headerid").innerHTML+="HSTS exists";
 else
-document.getElementById("headerid").innerHTML+="HSTS missing";
+main.innerHTML+="<td> HSTS exists </td>"
+//document.getElementById("headerid").innerHTML+="HSTS missing";
 });
