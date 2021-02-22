@@ -2,5 +2,11 @@ chrome.tabs.query({active: true, currentWindow: true},function(tab){
     var grabheader=chrome.extension.getBackgroundPage();
 recHeaders=grabheader.headers[tab[0].id];
 console.log(recHeaders);
-document.getElementById("headerid").innerHTML+=recHeaders.url+":::"+recHeaders.name+":::"+recHeaders.value;
+if(recHeaders.responseHeaders.find(a=>a.name.toLowerCase()==='content-security-policy'))
+{
+document.getElementById("headerid").innerHTML+="CSP exists";
+}
+else
+document.getElementById("headerid").innerHTML+="CSP missing";
+
 });
