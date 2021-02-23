@@ -1,16 +1,40 @@
 <html>
     <script src="popup.js"></script>
     <style>
-        table, th, td {
+        table{
   border: 1px solid black;
   border-collapse: collapse;
+  text-align: center;
+  font-size: 1em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+tr{
+    border-bottom: 1px solid #dddddd;
+}
+tr:nth-of-type(even) {
+    background-color: #bd3333;
+}
+tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+tr.active-row {
+    font-weight: bold;
+    color: #009879;
 }
     </style>
 <body>
     <div style="width:400px;height:500px">
     <center><h2>Secure HTTP Headers</h4></center>
-        <table id="main" style="width:100%;">
-        
+        <table id="main">
+            <tr class="active-row">
+                <th>Header</th>
+                <th>Value</th>
+            </tr>
+            <tbody>
+
+            </tbody>
         </table>
 </div>
 </body>
