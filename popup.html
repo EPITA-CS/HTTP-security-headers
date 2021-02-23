@@ -1,46 +1,57 @@
 <html>
     <script src="popup.js"></script>
     <style>
+        body{
+            color:white;
+            background: -webkit-linear-gradient(left, #25c481, #25b7c4);
+  background: linear-gradient(to right, #25c481, #25b7c4);
+  font-family: 'Roboto', sans-serif;
+        }
         table{
+            width:100%;
+  table-layout: fixed;
   border: 1px solid black;
   border-collapse: collapse;
   text-align: center;
-  font-size: 1em;
+  font-size: 1.1em;
     font-family: sans-serif;
     min-width: 400px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
+td
+{
+padding: 3px 3px;
+}
 tr{
-    border-bottom: 1px solid #dddddd;
-}
-tr:nth-of-type(even) {
-    background-color: #bd3333;
-}
-tr:last-of-type {
-    border-bottom: 2px solid #009879;
-}
-tr.active-row {
-    font-weight: bold;
-    color: #009879;
+    border: 1px solid #000000;
 }
 tr.strong{
-    background-color: aqua;
+    color:green;
+    font-weight: bold;
 }
 tr.weak{
-    background-color: salmon;
+    color: red;
+    font-weight: bold;
+}
+th{
+    background-color:black;
+    color:white;
+}
+h2{
+    padding-top: 10px;
+    font-family:'Courier New', Courier, monospace;
 }
     </style>
 <body>
     <div style="width:400px;height:500px">
     <center><h2>Secure HTTP Headers</h4></center>
-        <table id="main">
-            <tr class="active-row">
+        <table>
+            <tr>
                 <th>Header</th>
                 <th>Value</th>
             </tr>
-            <tbody>
-
-            </tbody>
+            <table id="main">
+            </table>
         </table>
 </div>
 </body>
