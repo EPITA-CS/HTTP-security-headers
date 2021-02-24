@@ -5,7 +5,7 @@
 "default_popup": "popup.html"
 },
 "version":"1.0",
-"permissions":["webRequest", "tabs", "storage", "downloads", "notifications", "tabs"],
+"permissions":["webRequest", "tabs", "storage", "downloads", "notifications", "*://*/*"],
 "icons": {
       "48": "48.png",
       "96": "96.png"
