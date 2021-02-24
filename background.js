@@ -128,29 +128,9 @@ for(i=0;i<headers[details.tabId].length;i++)
 
         if(headers[details.tabId][i].value.includes("report-uri"))
         {
-            
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> report-uri deprecated </td><td><i class=\"fa fa-exclamation\"></i></td></tr>"
         }
-
-        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> default-src none </td><td><i class=\"fa fa-exclamation\"></i></td></tr>"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
     }  
 
     if(headers[details.tabId][i].name==="strict-transport-security")
