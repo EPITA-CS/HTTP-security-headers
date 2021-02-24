@@ -1,11 +1,15 @@
 <html>
     <script src="popup.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body{
             color:white;
-            background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-  background: linear-gradient(to right, #25c481, #25b7c4);
+            background: -webkit-linear-gradient(to top, #25c481, #25b7c4);
+  background: linear-gradient(to top, #25c481, #25b7c4);
   font-family: 'Roboto', sans-serif;
+        }
+        button{
+            margin-top: 6px;
         }
         table{
             width:100%;
@@ -41,18 +45,17 @@ h2{
     padding-top: 10px;
     font-family:'Courier New', Courier, monospace;
 }
+p{
+ font-weight: bold;   
+}
     </style>
 <body>
-    <div style="width:400px;height:500px">
+    <div style="width:400px;">
     <center><h2>Secure HTTP Headers</h4></center>
-        <table>
-            <tr>
-                <th>Header</th>
-                <th>Value</th>
-            </tr>
+        <p id="errorbody"></p>
             <table id="main">
             </table>
-        </table>
+        <center><button>Click here for details</button></center>
 </div>
 </body>
 </html>
