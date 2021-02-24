@@ -4,7 +4,7 @@ var secureheaders={};
 chrome.webRequest.onHeadersReceived.addListener(function(details){
 console.log(details)
 headers[details.tabId]=details.responseHeaders;
-headers[details.tabId].csp=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp=0;
+headers[details.tabId].csp=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp.headers[details.tabId].fp=headers[details.tabId].ect=0;
 
 for(i=0;i<headers[details.tabId].length;i++)
 {
@@ -95,6 +95,23 @@ for(i=0;i<headers[details.tabId].length;i++)
         else if(headers[details.tabId][i].value.includes("strict-origin-when-cross-origin"))
         secureheaders[details.tabId]+="<tr class=\"strong\"><td> referrer-policy</td><td>strict-origin-when-cross-origin</td><td><i class=\"fa fa-check\"></i></td></tr>";
     }
+    
+    if(headers[details.tabId][i].name==="feature-policy")
+    {
+        headers[details.tabId].fp=1;
+        if(headers[details.tabId][i].value.includes("camera *"))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td> feature-policy </td><td> camera * </td></tr>";
+        if(headers[details.tabId][i].value.includes("none"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> feature-policy </td><td> none </td></tr>";
+        if(headers[details.tabId][i].value.includes("self"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> feature-policy </td><td> self </td></tr>";
+    }
+
+    if(headers[details.tabId][i].name==="expect-ct")
+    {
+        headers[details.tabId].ect=1;
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> expect-ct </td><td> exist </td></tr>";
+    }
 }
 if(headers[details.tabId].csp===0)
 secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> non-existent </td></tr>";
@@ -108,6 +125,10 @@ if(headers[details.tabId].xct===0)
 secureheaders[details.tabId]+="<tr class=\"weak\"><td>x-content-type-options:</td><td> non-existent </td></tr>";
 if(headers[details.tabId].rp===0)
 secureheaders[details.tabId]+="<tr class=\"weak\"><td>referrer-policy:</td><td> non-existent </td></tr>";
+if(headers[details.tabId].fp===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>feature-policy:</td><td> non-existent </td></tr>";
+if(headers[details.tabId].ect===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>expect-ct:</td><td> non-existent </td></tr>";
 
 },{urls: ["<all_urls>"],types: ["main_frame"]},["responseHeaders"]);
 
