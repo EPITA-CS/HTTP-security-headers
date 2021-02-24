@@ -1,137 +1,62 @@
 var headers={};
 var secureheaders={};
+var expheaders={};
 
 chrome.webRequest.onHeadersReceived.addListener(function(details){
 console.log(details)
 headers[details.tabId]=details.responseHeaders;
 headers[details.tabId].csp=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp=headers[details.tabId].fp=headers[details.tabId].ect=0;
-
+function stringstripper(str,check)
+{
+    var start=str.indexOf(check);
+    var end=str.indexOf(";",start);
+    if (start !=-1 && end !=-1 &&  end  > start)
+    return scriptstr= str.substring(start , end );
+}
+function cspchecker(str,dir)
+{
+    if(str.includes("'none'"))
+    secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td>"+ dir+ " none </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    if(str.includes("'self'"))
+    secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td>"+ dir+ " self </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    if(str.includes("*"))
+    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " * </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    if(str.includes('unsafe-inline'))
+    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " unsafe-inline </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    if(str.includes('unsafe-eval'))
+    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " unsafe-eval </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    if(str.includes('unsafe-hashes'))
+    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " unsafe-hashes </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    if(str.includes('data:'))
+    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " data scheme source </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    if(str.includes('127.0.0.1'))
+    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " source is local host </td><td><i class=\"fa fa-check\"></i></td></tr>";
+}
+function callcsp(indexnum){
+    var count=0;
+    var cspdirs=["default-src","script-src","child-src","connect-src","font-src","frame-src","img-src","manifest-src","media-src","object-src","prefect-src","script-src-elem","script-src-attr","style-src","style-src-elem","style-src-attr","worker-src","base-uri","plugin-types","sandbox","form-action","frame-ancestors","navigate-to"]
+    for(x=0;x<cspdirs.length;x++)
+    {
+        if(headers[details.tabId][indexnum].value.includes(cspdirs[x]))
+        {
+            cspstr=stringstripper(headers[details.tabId][indexnum].value,cspdirs[x]);
+            cspchecker(cspstr,cspdirs[x]);
+        }
+        if(!headers[details.tabId][indexnum].value.includes(cspdirs[x]))
+        count++;
+    }
+    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> missing "+count+" CSP directives </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
+}
 for(i=0;i<headers[details.tabId].length;i++)
 {
     if(headers[details.tabId][i].name==="content-security-policy") //all conditions aren't checked this is a sample
     {
+
         headers[details.tabId].csp=1;
-        if(headers[details.tabId][i].value.includes("default-src 'none'"))
-        secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> default-src none </td><td><i class=\"fa fa-check\"></i></td></tr>"
-        if(headers[details.tabId][i].value.includes("default-src 'self'"))
-        secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> default-src self </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-        if(headers[details.tabId][i].value.includes("default-src *"))
-        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> default-src * </td> <td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-        if(!headers[details.tabId][i].value.includes("default-src"))
-        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> default-src missing </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-        if(headers[details.tabId][i].value.includes("script-src"))
-        {
-            var start=headers[details.tabId][i].value.indexOf("script-src");
-            var end=headers[details.tabId][i].value.indexOf(";",start);
-            if (start !=-1 && end !=-1 &&  end  > start)
-            var scriptstr= headers[details.tabId][i].value.substring(start , end );
-            console.log(scriptstr);
-            if(scriptstr.includes('unsafe-inline'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> script-src is unsafe inline </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else if(scriptstr.includes('unsafe-eval'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> script-src is unsafe-eval </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else if(scriptstr.includes('unsafe-hashes'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> script-src is unsafe-hashes </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else if(scriptstr.includes('self'))
-            secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> script-src is self </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-            else if(scriptstr.includes('none'))
-            secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> script-src is unsafe-hashes </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-        }
-        if(headers[details.tabId][i].value.includes("child-src"))
-        {
-            var start=headers[details.tabId][i].value.indexOf("child-src");
-            var end=headers[details.tabId][i].value.indexOf(";",start);
-            if (start !=-1 && end !=-1 &&  end  > start)
-            var scriptstr= headers[details.tabId][i].value.substring(start , end );
-            console.log(scriptstr);
-            if(scriptstr.includes('unsafe-inline'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> child-src is unsafe inline </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else if(scriptstr.includes('unsafe-eval'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> child-src is unsafe-eval </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else if(scriptstr.includes('unsafe-hashes'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> child-src is unsafe-hashes </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else if(scriptstr.includes('self'))
-            secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> child-src is self </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-            else if(scriptstr.includes('none'))
-            secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> child-src is none </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-            else if(scriptstr.includes('https://')) //not sure about * conditions whether it is secure to accept all *.com
-            secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> child-src is https </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-            else if(scriptstr.includes('http://'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> child-src is http </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-        }
-        if(headers[details.tabId][i].value.includes("connect-src"))
-        {
-            var start=headers[details.tabId][i].value.indexOf("connect-src");
-            var end=headers[details.tabId][i].value.indexOf(";",start);
-            if (start !=-1 && end !=-1 &&  end  > start)
-            var scriptstr= headers[details.tabId][i].value.substring(start , end );
-            console.log(scriptstr);
-            if(scriptstr.includes('unsafe-inline'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> connect-src is unsafe inline </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else if(scriptstr.includes('unsafe-eval'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> connect-src is unsafe-eval </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else if(scriptstr.includes('unsafe-hashes'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> connect-src is unsafe-hashes </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else if(scriptstr.includes('self'))
-            secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> connect-src is self </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-            else if(scriptstr.includes('none'))
-            secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> connect-src is none </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-            else if(scriptstr.includes('https://')) 
-            {
-            if(scriptstr.includes('https://127.0.0.1'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> connect-src is localhost </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-            else
-            secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> connect-src is https </td><td> <i class=\"fa fa-check\"></i></td></tr>"
-            }
-            else if(scriptstr.includes('http://'))
-            secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> connect-src is http </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
-        }
-        if(headers[details.tabId][i].value.includes("font-src"))
-
-        if(headers[details.tabId][i].value.includes("frame-src"))
-
-        if(headers[details.tabId][i].value.includes("img-src"))
-
-        if(headers[details.tabId][i].value.includes("manifest-src"))
-
-        if(headers[details.tabId][i].value.includes("media-src"))
-
-        if(headers[details.tabId][i].value.includes("object-src"))
-
-        if(headers[details.tabId][i].value.includes("prefect-src"))
-
-        if(headers[details.tabId][i].value.includes("script-src"))
-
-        if(headers[details.tabId][i].value.includes("script-src-elem"))
-
-        if(headers[details.tabId][i].value.includes("script-src-attr"))
-
-        if(headers[details.tabId][i].value.includes("style-src"))
-
-        if(headers[details.tabId][i].value.includes("style-src-elem"))
-
-        if(headers[details.tabId][i].value.includes("style-src-attr"))
-
-        if(headers[details.tabId][i].value.includes("worker-src"))
-
-        if(headers[details.tabId][i].value.includes("base-uri"))
-
-        if(headers[details.tabId][i].value.includes("plugin-types"))
-
-        if(headers[details.tabId][i].value.includes("sandbox"))
-
-        if(headers[details.tabId][i].value.includes("form-action"))
-
-        if(headers[details.tabId][i].value.includes("frame-ancestors"))
-
-        if(headers[details.tabId][i].value.includes("navigate-to"))
-
-        if(headers[details.tabId][i].value.includes("report-uri"))
-        {
-        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> report-uri deprecated </td><td><i class=\"fa fa-exclamation\"></i></td></tr>"
-        }
-        
-    }  
+        callcsp(i);
+    if(headers[details.tabId][i].value.includes("report-uri"))
+    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> deprecated report-uri is used </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    }
 
     if(headers[details.tabId][i].name==="strict-transport-security")
     {
