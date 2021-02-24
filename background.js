@@ -1,118 +1,112 @@
 var headers={};
 var secureheaders={};
+
 chrome.webRequest.onHeadersReceived.addListener(function(details){
-headers[details.tabId]=details;
-console.log(details);
-
-if(headers[details.tabId].responseHeaders.find(a=>a.name.toLowerCase()==='content-security-policy'))
+console.log(details)
+headers[details.tabId]=details.responseHeaders;
+headers[details.tabId].csp=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp=0;
+for(i=0;i<headers[details.tabId].length;i++)
 {
-if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='content-security-policy')&&(a=>a.value.includes('default-src none')))) //this check works
-{ 
-secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td>default-src 'none'</td></tr>"}
-else if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='content-security-policy')&&(a=>a.value.includes('default-src *'))))
-{
-secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> default-src * </td></tr>"
-}
-else if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='content-security-policy')&&(a=>a.value.includes("default-src 'self'"))))
-{
-secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> default-src 'self' </td></tr>"
-}
-else if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='content-security-policy')&&(a=>a.value.includes("script-src 'self'"))))
-{
-secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> script-src 'self' </td></tr>"
-}
-else if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='content-security-policy')&&(a=>a.value.includes("script-src '*'"))))
-{
-secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> script-src '*' </td></tr>"
-}
-}
-else
-secureheaders[details.tabId]+="<td> Content-Security-Policy </td><td>missing</td>";
-
-if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='x-xss-protection' )))
-{if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='x-xss-protection')&&(a=>a.value.includes("0"))))
-secureheaders[details.tabId]+="<tr class=\"weak\"><td> x-xss-protection </td><td> zero </td></tr>";
-else {
-secureheaders[details.tabId]+="<tr class=\"strong\"><td> x-xss-protection </td><td> 1</td></tr>";} 
-if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='x-xss-protection')&&(a=>a.value.includes("mode=block"))))
-secureheaders[details.tabId]+="<tr class=\"strong\"><td>x-xss-protection </td><td> block </td></tr>";    
-}
-secureheaders[details.tabId]+="<tr class = \"weak\"><td> x-xss-protection </td><td>missing</td></tr>";
-
-if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='x-frame-options' )))
-{if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='x-frame-options')&&(a=>a.value.includes("ALLOW-FROM"))))
-secureheaders[details.tabId]+="<tr class=\"weak\"><td> x-frame-options </td><td> ALLOW-FROM </td></tr>";
-else  if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='x-frame-options')&&(a=>a.value.includes("DENY"))))
-secureheaders[details.tabId]+="<tr class=\"strong\"><td>x-frame-options </td><td> DENY </td></tr>";  
-if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='x-frame-options')&&(a=>a.value.includes("SAMEORIGIN"))))
-secureheaders[details.tabId]+="<tr class=\"strong\"><td>x-frame-options </td><td> SAMEORIGIN </td></tr>";
-}
-else
-secureheaders[details.tabId]+="<tr class = \"weak\"><td> x-frame-options </td><td>missing</td></tr>";  
-
-if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='expect-ct' )))
-secureheaders[details.tabId]+="<tr class=\"strong\"><td>expect-ct </td><td> Present </td></tr>";
-else
-secureheaders[details.tabId]+="<tr class = \"weak\"><td> expect-ct </td><td>absent</td></tr>";  
-
-if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='strict-transport-security')))
-{if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='strict-transport-security')&&(a=>a.value.includes("max-age=0"))))
-secureheaders[details.tabId]+="<tr class=\"weak\"><td> strict-transport-security </td><td> max-age is zero </td></tr>"; 
-else {
-secureheaders[details.tabId]+="<tr class=\"strong\"><td> strict-transport-security </td><td> max-age not zero</td></tr>";} 
-if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='strict-transport-security')&&(a=>a.value.includes("includeSubDomains"))))
-secureheaders[details.tabId]+="<tr class=\"strong\"><td>strict-transport-security </td><td> includeSubdomains </td></tr>"; 
-}
-else
-secureheaders[details.tabId]+="<td> strict-transport-security </td><td>missing</td>";
-
-if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='x-content-type-options')))
-{
-    if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='x-content-type-options')&&(a=>a.value.includes("nosniff"))))
-    secureheaders[details.tabId]+="<tr class=\"strong\" ><td> x-content-type-options </td><td> nosniff</td></tr>";
-    else 
-    secureheaders[details.tabId]+="<tr class=\"weak\" ><td> x-content-type-options </td><td> none</td></tr>";
-}
-else
-secureheaders[details.tabId]+="<tr class=\"weak\" ><td> x-content-type-options </td><td> missing </td></tr>"
-
-if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='referrer-policy')))
-{
-    if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='referrer-policy')&&(a=>a.value.includes("unsafe-url"))))
-    secureheaders[details.tabId]+="<tr class=\"weak\" ><td> referrer-policy </td><td> unsafe-url </td></tr>";
-    else (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='referrer-policy')&&(a=>a.value.includes("origin-when-cross-origin")))) 
-    secureheaders[details.tabId]+="<tr class=\"weak\" ><td> referrer-policy </td><td> origin-when-cross-origin </td></tr>";
-}
-else
-secureheaders[details.tabId]+="<tr class=\"weak\" ><td> referrer-policy </td><td> missing </td></tr>"
-
-if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='feature-policy')))
-{
-    if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='feature-policy')&&(a=>a.value.includes("camera *"))))
-    secureheaders[details.tabId]+="<tr class=\"weak\" ><td> feature-policy </td><td> camera*  </td></tr>";
-    else if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='feature-policy')&&(a=>a.value.includes("microphone *"))))
-    secureheaders[details.tabId]+="<tr class=\"weak\" ><td> feature-policy </td><td> microphone *  </td></tr>";
-    else if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='feature-policy')&&(a=>a.value.includes("self"))))
-    secureheaders[details.tabId]+="<tr class=\"strong\" ><td> feature-policy </td><td> self  </td></tr>";
-}
-else
-secureheaders[details.tabId]+="<tr class=\"weak\" ><td> feature-policy </td><td> missing </td></tr>"
-
-if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='access-control-allow-origin')))
-{
-    if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='access-control-allow-origin')&&(a=>a.value.includes("*"))))
-    secureheaders[details.tabId]+="<tr class=\"weak\" ><td> access-control-allow-origin </td><td> * </td></tr>"
-    else if (headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='access-control-allow-origin')&&(a=>a.value.includes("null"))))
+    if(headers[details.tabId][i].name==="content-security-policy") //all conditions aren't checked this is a sample
     {
-    if(headers[details.tabId].responseHeaders.find((a=>a.name.toLowerCase()==='access-control-allow-credentials')&&(a=>a.value.includes("true"))))
-    secureheaders[details.tabId]+="<tr class=\"weak\" ><td> access-control-allow-origin and access-control-allow-credentials </td><td> null and true </td></tr>"
-    else 
-    secureheaders[details.tabId]+="<tr class=\"strong\" ><td> CORS </td><td> null </td></tr>"
+        headers[details.tabId].csp=1;
+        if(headers[details.tabId][i].value.includes("default-src 'none'"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> default-src none </td></tr>"
+        if(headers[details.tabId][i].value.includes("default-src 'self'"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td> default-src self </td></tr>"
+        if(headers[details.tabId][i].value.includes("default-src *"))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> default-src * </td></tr>"
+        if(!headers[details.tabId][i].value.includes("default-src"))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> default-src missing </td></tr>";
+    }  
+
+    if(headers[details.tabId][i].name==="strict-transport-security")
+    {
+        headers[details.tabId].hsts=1;
+        if(headers[details.tabId][i].value.includes("max-age=0"))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Strict-Transport-Security:</td><td> max-age=0 </td></tr>"
+        if(!headers[details.tabId][i].value.includes("max-age"))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Strict-Transport-Security:</td><td> max-age missing </td></tr>"
+        else{
+            var newstr=headers[details.tabId][i].value.substring('max-age='.length);
+            //newstr=newstr.substring('max-age='.length);
+            var num=parseInt(newstr);
+            secureheaders[details.tabId]+="<tr class=\"strong\"><td>Strict-Transport-Security:</td><td> max-age is "+num+"</td></tr>";
+        }
+        if(headers[details.tabId][i].value.includes("includeSubDomains"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td>Strict-Transport-Security:</td><td> includeSubDomains </td></tr>"
+        else
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Strict-Transport-Security:</td><td> Missing includeSubDomains </td></tr>";
     }
+
+    if(headers[details.tabId][i].name==="x-xss-protection")
+    {
+        headers[details.tabId].xss=1;
+        if(headers[details.tabId][i].value.includes("0"))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td> x-xss-protection </td><td> zero </td></tr>";
+        if(headers[details.tabId][i].value.includes("1; mode=block"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> x-xss-protection </td><td> one and mode is block </td></tr>";
+        if(headers[details.tabId][i].value.includes("1; report=".urls))// fill this to get http/https 
+
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td> x-xss-protection </td><td> URI is HTTP </td></tr>";
+        else
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> x-xss-protection </td><td> URI is HTTPs </td></tr>";
+
+    }
+
+    if(headers[details.tabId][i].name==="x-frame-options")
+    {
+        headers[details.tabId].xfo=1;
+        if(headers[details.tabId][i].value.includes("allow-from"))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td> x-frame-options </td><td> allow-from </td></tr>";
+        if(headers[details.tabId][i].value.includes("sameorigin"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> x-frame-options </td><td> sameorigin </td></tr>";
+        if(headers[details.tabId][i].value.includes("deny"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> x-frame-options </td><td> deny </td></tr>";
+    }
+
+    if(headers[details.tabId][i].name==="x-content-type-options")
+    {
+        headers[details.tabId].xct=1;
+        if(headers[details.tabId][i].value.includes("nosniff"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> x-content-type-options </td><td> nosniff </td></tr>";
+        else
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> x-content-type-options </td><td> not nosniff </td></tr>";
+    }
+
+    if(headers[details.tabId][i].name==="referrer-policy")
+    {
+        headers[details.tabId].rp=1;
+        if(headers[details.tabId][i].value.includes("origin-when-cross-origin"))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td> referrer-policy </td><td> origin-when-cross-origin </td></tr>";
+        if(headers[details.tabId][i].value.includes("unsafe-url"))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td> referrer-policy</td><td>unsafe-url</td></tr>";
+        if(headers[details.tabId][i].value.includes("no-referrer"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> referrer-policy</td><td>no-referrer</td></tr>";
+        if(headers[details.tabId][i].value.includes("no-referrer-when-downgrade"))
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> referrer-policy</td><td>no-referrer-when-downgrade</td></tr>";
+        if(headers[details.tabId][i].value.includes("origin"))
+        ecureheaders[details.tabId]+="<tr class=\"strong\"><td> referrer-policy</td><td>origin</td></tr>";
+
+    }
+
+
+
 }
-else
-secureheaders[details.tabId]+="<tr class=\"weak\" ><td> access-control-allow-origin </td><td> missing </td></tr>"
-},{urls: ["<all_urls>"],types:["main_frame"]},["responseHeaders"]);
+if(headers[details.tabId].csp===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> non-existent </td></tr>";
+if(headers[details.tabId].hsts===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>Strict-Transport-Security:</td><td> non-existent </td></tr>";
+if(headers[details.tabId].xss===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>x-xss-protection:</td><td> non-existent </td></tr>";
+if(headers[details.tabId].xfo===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>x-frame-options:</td><td> non-existent </td></tr>";
+if(headers[details.tabId].xct===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>x-content-type-options:</td><td> non-existent </td></tr>";
+if(headers[details.tabId].rp===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>referrer-policy:</td><td> non-existent </td></tr>";
+
+},{urls: ["<all_urls>"],types: ["main_frame"]},["responseHeaders"]);
 
 chrome.tabs.onRemoved.addListener(function(tabId,removeInfo)
 {
