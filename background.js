@@ -1,22 +1,23 @@
 var headers={};
 var secureheaders={};
-var expheaders={};
 
 chrome.webRequest.onHeadersReceived.addListener(function(details){
 console.log(details)
 headers[details.tabId]=details.responseHeaders;
-headers[details.tabId].csps=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp=headers[details.tabId].fp=headers[details.tabId].ect=0;
+headers[details.tabId].csp=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp=headers[details.tabId].fp=headers[details.tabId].ect=0;
 headers[details.tabId].url=details.url;
 function stringstripper(str,check)
 {
     var start=str.indexOf(check);
+    if(str.includes(";",start))
     var end=str.indexOf(";",start);
+    else
+    var end=str.length;
     if (start !=-1 && end !=-1 &&  end  > start)
     return scriptstr= str.substring(start , end );
 }
 function cspchecker(str,dir)
-{
-    
+{   
     headers[details.tabId]["csp"][dir]["none"]=headers[details.tabId]["csp"][dir]["self"]=headers[details.tabId]["csp"][dir]["star"]=headers[details.tabId]["csp"][dir]["inline"]=headers[details.tabId]["csp"][dir]["eval"]=headers[details.tabId]["csp"][dir]["hashes"]=headers[details.tabId]["csp"][dir]["data"]=headers[details.tabId]["csp"][dir]["local"]=0;
     //headers[details.tabId]["csp"][dir].none=headers[details.tabId]["csp"][dir].self=headers[details.tabId]["csp"][dir].star=headers[details.tabId]["csp"][dir].inline=headers[details.tabId]["csp"][dir].eval=headers[details.tabId]["csp"][dir].hashes=headers[details.tabId]["csp"][dir].data=headers[details.tabId]["csp"][dir]["local"]=0;
     if(str.includes("'none'"))
@@ -74,13 +75,16 @@ for(i=0;i<headers[details.tabId].length;i++)
     {
         headers[details.tabId].hsts=1;
         if(headers[details.tabId][i].value.includes("max-age=0"))
-        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Strict-Transport-Security:</td><td> max-age=0 </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
+        {headers[details.tabId].hsts.maxage=0;
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Strict-Transport-Security:</td><td> max-age=0 </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"}
         if(!headers[details.tabId][i].value.includes("max-age"))
-        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Strict-Transport-Security:</td><td> max-age missing </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
+        {headers[details.tabId].hsts.maxage=1;
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td>Strict-Transport-Security:</td><td> max-age missing </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";}
         else{
             var newstr=headers[details.tabId][i].value.substring('max-age='.length);
             var num=parseInt(newstr);
             secureheaders[details.tabId]+="<tr class=\"strong\"><td>Strict-Transport-Security:</td><td> max-age is "+num+"</td><td><i class=\"fa fa-check\"></i></td></tr>";
+            headers[details.tabId].hsts.maxage=2;
         }
         if(headers[details.tabId][i].value.includes("includeSubDomains"))
         secureheaders[details.tabId]+="<tr class=\"strong\"><td>Strict-Transport-Security:</td><td> includeSubDomains </td><td><i class=\"fa fa-check\"></i></td></tr>"
