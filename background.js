@@ -5,7 +5,8 @@ var expheaders={};
 chrome.webRequest.onHeadersReceived.addListener(function(details){
 console.log(details)
 headers[details.tabId]=details.responseHeaders;
-headers[details.tabId].csp=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp=headers[details.tabId].fp=headers[details.tabId].ect=headers[details.tabId].acao=headers[details.tabId].acma=0;
+headers[details.tabId].csps=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp=headers[details.tabId].fp=headers[details.tabId].ect=0;
+headers[details.tabId].url=details.url;
 function stringstripper(str,check)
 {
     var start=str.indexOf(check);
@@ -15,26 +16,38 @@ function stringstripper(str,check)
 }
 function cspchecker(str,dir)
 {
+    
+    headers[details.tabId]["csp"][dir]["none"]=headers[details.tabId]["csp"][dir]["self"]=headers[details.tabId]["csp"][dir]["star"]=headers[details.tabId]["csp"][dir]["inline"]=headers[details.tabId]["csp"][dir]["eval"]=headers[details.tabId]["csp"][dir]["hashes"]=headers[details.tabId]["csp"][dir]["data"]=headers[details.tabId]["csp"][dir]["local"]=0;
+    //headers[details.tabId]["csp"][dir].none=headers[details.tabId]["csp"][dir].self=headers[details.tabId]["csp"][dir].star=headers[details.tabId]["csp"][dir].inline=headers[details.tabId]["csp"][dir].eval=headers[details.tabId]["csp"][dir].hashes=headers[details.tabId]["csp"][dir].data=headers[details.tabId]["csp"][dir]["local"]=0;
     if(str.includes("'none'"))
-    secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td>"+ dir+ " none </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    {secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td>"+ dir+ " none </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    headers[details.tabId]["csp"][dir].none=1;}
     if(str.includes("'self'"))
-    secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td>"+ dir+ " self </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    {secureheaders[details.tabId]+="<tr class=\"strong\"><td>Content-Security-Policy:</td><td>"+ dir+ " self </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    headers[details.tabId]["csp"][dir].self=1;}
     if(str.includes("*"))
-    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " * </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    {secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " * </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+    headers[details.tabId]["csp"][dir].star=1;}
     if(str.includes('unsafe-inline'))
-    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " unsafe-inline </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    {secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " unsafe-inline </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+    headers[details.tabId]["csp"][dir].inline=1;}
     if(str.includes('unsafe-eval'))
-    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " unsafe-eval </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    {secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " unsafe-eval </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+    headers[details.tabId]["csp"][dir].eval=1;}
     if(str.includes('unsafe-hashes'))
-    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " unsafe-hashes </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    {secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " unsafe-hashes </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+    headers[details.tabId]["csp"][dir].hashes=1;}
     if(str.includes('data:'))
-    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " data scheme source </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    {secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " data scheme source </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+    headers[details.tabId]["csp"][dir].data=1;}
     if(str.includes('127.0.0.1'))
-    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " source is local host </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    {secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td>"+ dir+ " source is local host </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+    headers[details.tabId]["csp"][dir].local=1;}
 }
 function callcsp(indexnum){
     var count=0;
-    var cspdirs=["default-src","script-src","child-src","connect-src","font-src","frame-src","img-src","manifest-src","media-src","object-src","prefect-src","script-src-elem","script-src-attr","style-src","style-src-elem","style-src-attr","worker-src","base-uri","plugin-types","sandbox","form-action","frame-ancestors","navigate-to"]
+    var cspdirs=["default-src","script-src","child-src","connect-src","font-src","frame-src","img-src","manifest-src","media-src","object-src","prefect-src","script-src-elem","script-src-attr","style-src","style-src-elem","style-src-attr","worker-src","base-uri","plugin-types","sandbox","form-action","frame-ancestors","navigate-to"];
+    headers[details.tabId]["csp"]={"default-src":{},"script-src":{},"child-src":{},"connect-src":{},"font-src":{},"frame-src":{},"img-src":{},"manifest-src":{},"media-src":{},"object-src":{},"prefect-src":{},"script-src-elem":{},"script-src-attr":{},"style-src":{},"style-src-elem":{},"style-src-attr":{},"worker-src":{},"base-uri":{},"plugin-types":{},"sandbox":{},"form-action":{},"frame-ancestors":{},"navigate-to":{}};       //idk if this empties the object
     for(x=0;x<cspdirs.length;x++)
     {
         if(headers[details.tabId][indexnum].value.includes(cspdirs[x]))
@@ -49,13 +62,12 @@ function callcsp(indexnum){
 }
 for(i=0;i<headers[details.tabId].length;i++)
 {
-    if(headers[details.tabId][i].name==="content-security-policy") //all conditions aren't checked this is a sample
+    if(headers[details.tabId][i].name==="content-security-policy")
     {
-
         headers[details.tabId].csp=1;
         callcsp(i);
     if(headers[details.tabId][i].value.includes("report-uri"))
-    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> deprecated report-uri is used </td><td><i class=\"fa fa-check\"></i></td></tr>";
+    secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> deprecated report-uri is used </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
     }
 
     if(headers[details.tabId][i].name==="strict-transport-security")
@@ -67,7 +79,6 @@ for(i=0;i<headers[details.tabId].length;i++)
         secureheaders[details.tabId]+="<tr class=\"weak\"><td>Strict-Transport-Security:</td><td> max-age missing </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>"
         else{
             var newstr=headers[details.tabId][i].value.substring('max-age='.length);
-            //newstr=newstr.substring('max-age='.length);
             var num=parseInt(newstr);
             secureheaders[details.tabId]+="<tr class=\"strong\"><td>Strict-Transport-Security:</td><td> max-age is "+num+"</td><td><i class=\"fa fa-check\"></i></td></tr>";
         }
@@ -150,36 +161,11 @@ for(i=0;i<headers[details.tabId].length;i++)
     if(headers[details.tabId][i].name==="access-control-allow-origin")
     {
        headers[details.tabId].acao=1;
-       if(headers[details.tabId][i].value.includes("*"))
-       secureheaders[details.tabId]+="<tr class=\"weak\"><td> access-control-allow-origin </td><td> * </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
-       if(headers[details.tabId][i].value.includes("null"))
-       {
-        if((headers[details.tabId][i].name==="access-control-allow-credentials") && (headers[details.tabId][i].value.includes("true")))
-        secureheaders[details.tabId]+="<tr class=\"weak\"><td> access-control-allow-origin and access-control-allow-credentials</td><td> null and true </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
-        else
-        secureheaders[details.tabId]+="<tr class=\"strong\"><td> access-control-allow-origin </td><td> null </td><td><i class=\"fa fa-check\"></i></td></tr>";
-        }
-       if(headers[details.tabId][i].value.includes("http://"))
-       {
-       if((headers[details.tabId][i].name==="access-control-allow-credentials") && (headers[details.tabId][i].value.includes("true")))
-       secureheaders[details.tabId]+="<tr class=\"weak\"><td> access-control-allow-origin and access-control-allow-credentials</td><td> true </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
-       }
+
+
 
     }
-    if(headers[details.tabId][i].name==="access-control-max-age")
-    {   
-        headers[details.tabId].acma=1
-        if (headers[details.tabId][i].value.includes.substring('max-age='.length));
-        //newstr=newstr.substring('max-age='.length);
-        var num=parseInt(newstr);
-        if (num>1800)
-        secureheaders[details.tabId]+="<tr class=\"weak\"><td>access-control-max-age:</td><td> max-age is "+num+"</td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
-        else
-        secureheaders[details.tabId]+="<tr class=\"strong\"><td>access-control-max-age:</td><td> max-age is "+num+"</td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
-    }
 
-
-   
 }
 if(headers[details.tabId].csp===0)
 secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
@@ -197,11 +183,6 @@ if(headers[details.tabId].fp===0)
 secureheaders[details.tabId]+="<tr class=\"weak\"><td>feature-policy:</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
 if(headers[details.tabId].ect===0)
 secureheaders[details.tabId]+="<tr class=\"weak\"><td>Expect-ct:</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
-if(headers[details.tabId].acao===0)
-secureheaders[details.tabId]+="<tr class=\"weak\"><td>access-control-allow-origin</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
-if(headers[details.tabId].acma===0)
-secureheaders[details.tabId]+="<tr class=\"weak\"><td>access-control-max-age</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
-
 },{urls: ["<all_urls>"],types: ["main_frame"]},["responseHeaders"]);
 
 chrome.tabs.onRemoved.addListener(function(tabId,removeInfo)
