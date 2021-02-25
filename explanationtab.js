@@ -21,18 +21,40 @@ for(x=0;x<cspdirs.length;x++)
             {
                 switch(params[y])
                 {
-                    case "none":pagedata+="<p>This is a strong configuration as the default-src directive is used when any specific fetch directive is missing. This means that if any type of resource does not have specified sources for fetching then the resource will not be fetched at all.</p>";
+                    case "none":pagedata+="<div class=\"divider\" /><p>This is a strong configuration as the default-src directive is used when any specific fetch directive is missing. This means that if any type of resource does not have specified sources for fetching then the resource will not be fetched at all.</p>";
                                 break;
-                    case "self":pagedata+="<p>This is a strong configuration as it means that if any type of resource does not have specified sources for fetching then the resource can only be fetched from the same domain.</p>";
+                    case "self":pagedata+="<div class=\"divider\" /><p>This is a strong configuration as it means that if any type of resource does not have specified sources for fetching then the resource can only be fetched from the same domain.</p>";
                     break;
-                    case "star":pagedata+="<p>This is a weak configuration just because.</p>";
+                    case "star":pagedata+="<div class=\"divider\" /><p>This is a weak configuration just because.</p>";
                     break;
-                    default: pagedata+="<p>No switch match</p>";
+                    default: pagedata+="<div class=\"divider\" /><p>No switch match</p>";
+                }
+            }
+            if(cspdirs[x]==="frame-ancestors")
+            {
+                switch(params[y])
+                {
+                    case "none":pagedata+="<div class=\"divider\" /><p>This is a FA strong configuration as the default-src directive is used when any specific fetch directive is missing. This means that if any type of resource does not have specified sources for fetching then the resource will not be fetched at all.</p>";
+                                break;
+                    case "self":pagedata+="<div class=\"divider\" /><p>This is a FA strong configuration as it means that if any type of resource does not have specified sources for fetching then the resource can only be fetched from the same domain.</p>";
+                    break;
+                    case "star":pagedata+="<div class=\"divider\" /><p>This is a FA weak configuration just because.</p>";
+                    break;
+                    default: pagedata+="<div class=\"divider\" /><p>No switch match</p>";
                 }
             }
             
         }
     }
+}
+if(grabber.headers[tabid].hsts.maxage===0){
+    pagedata+="<div class=\"divider\" /><p>This is a weak configuration, when the max-age is set to 0 the browser ignores the hsts header and it is the same as not including an hsts header at all.</p>";   
+}
+if(grabber.headers[tabid].hsts.maxage===1){
+    pagedata+="<div class=\"divider\" /><p>This max-age is not set for the header. This is an invalid configuration.</p>";   
+}
+if(grabber.headers[tabid].hsts.maxage===2){
+    pagedata+="<div class=\"divider\" /><p>This is a strong configuration,  max-age is set and it is greater than 0, the browser can enforce the hsts policy for this site.</p>";   
 }
 console.log(pagedata);
 document.getElementById("fill").innerHTML=pagedata;
