@@ -1,0 +1,81 @@
+<html>
+<style>
+body{
+    background: -webkit-linear-gradient(to top, #16be78, #25b7c4);
+  background: linear-gradient(to top, #16be78, #25b7c4);
+  color:white;
+}
+h2{
+    text-align: center;
+}
+.divider {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  height: 2px;
+  margin-left: 5%;
+  width: 90%;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(90deg, #049fad(0, 0%, 20%), #03cc78(0, 0%, 0%), #25b7c4(0, 0%, 20%));
+}
+h3,p{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 5%;
+    font-weight: bold;
+}
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}
+</style>
+<link rel="stylesheet" href="share.min.css">
+<body>
+<div id="title"></div>
+<div>
+ <centre><h2 id="urlhere"></h2></centre>
+</div>
+<div id ="fill">
+        <div id="defaulteval" class="hide">
+        <div class="divider"></div>
+        <h3>default-src 'unsafe-eval'</h3>
+        <p>This property allows the use of eval() and similar methods to create code from strings. This can allow attackers to execute their own, perhaps malicious, code.</p>
+        </div>
+        <div id="defaulthashes" class="hide">
+        <div class="divider"></div>
+        <h3>default-src 'unsafe-hashes'</h3>
+        <p>It is a withdrawal directive used to specify the default content policy for most source directives.
+            This refers to the point from which the secured document is being served, including the same URL scheme and port number.</p>
+        </div>
+        <div id="defaultstar" class="hide">
+        <div class="divider"></div>
+        <h3>default-src '*'</h3>
+        <p>This configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+        </div>
+        <div id="defaultinline" class="hide">
+            <div class="divider"></div>
+            <h3>default-src 'unsafe-Inline':</h3>
+            <p>It allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.</p>
+            </div>
+        <div id="defaultdata" class="hide">
+        <div class="divider"></div>
+        <h3>default-src data:</h3>
+        <p>This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's </p>
+        </div>
+        <div id="defaultblob"class="hide">
+        <div class="divider"></div>
+        <h3>default-src blob:</h3>
+        <p>A Binary Large OBject (BLOB) is a collection of binary data stored as a single entity. Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.Here URL would be the content source.Since it has collection of different file types, sometiomes there could be malicious file injected by the attacker which makes the URL insecure.</p>
+        </div>
+
+</div>
+<div>
+    <div class="divider"></div>
+    <button class="good-share" data-share-title="Weak Security Headers" data-share-text="Here the text will be.">
+        Share These Results
+      </button>
+</div>
+</body>
+<script src="share.min.js"></script>
+<script sr
