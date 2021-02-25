@@ -5,7 +5,7 @@ var expheaders={};
 chrome.webRequest.onHeadersReceived.addListener(function(details){
 console.log(details)
 headers[details.tabId]=details.responseHeaders;
-headers[details.tabId].csp=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp=headers[details.tabId].fp=headers[details.tabId].ect=0;
+headers[details.tabId].csp=headers[details.tabId].hsts=headers[details.tabId].xss=headers[details.tabId].xfo=headers[details.tabId].xct=headers[details.tabId].rp=headers[details.tabId].fp=headers[details.tabId].ect=headers[details.tabId].acao=headers[details.tabId].acma=0;
 function stringstripper(str,check)
 {
     var start=str.indexOf(check);
@@ -150,11 +150,36 @@ for(i=0;i<headers[details.tabId].length;i++)
     if(headers[details.tabId][i].name==="access-control-allow-origin")
     {
        headers[details.tabId].acao=1;
-
-
+       if(headers[details.tabId][i].value.includes("*"))
+       secureheaders[details.tabId]+="<tr class=\"weak\"><td> access-control-allow-origin </td><td> * </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+       if(headers[details.tabId][i].value.includes("null"))
+       {
+        if((headers[details.tabId][i].name==="access-control-allow-credentials") && (headers[details.tabId][i].value.includes("true")))
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td> access-control-allow-origin and access-control-allow-credentials</td><td> null and true </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+        else
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td> access-control-allow-origin </td><td> null </td><td><i class=\"fa fa-check\"></i></td></tr>";
+        }
+       if(headers[details.tabId][i].value.includes("http://"))
+       {
+       if((headers[details.tabId][i].name==="access-control-allow-credentials") && (headers[details.tabId][i].value.includes("true")))
+       secureheaders[details.tabId]+="<tr class=\"weak\"><td> access-control-allow-origin and access-control-allow-credentials</td><td> true </td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+       }
 
     }
+    if(headers[details.tabId][i].name==="access-control-max-age")
+    {   
+        headers[details.tabId].acma=1
+        if (headers[details.tabId][i].value.includes.substring('max-age='.length));
+        //newstr=newstr.substring('max-age='.length);
+        var num=parseInt(newstr);
+        if (num>1800)
+        secureheaders[details.tabId]+="<tr class=\"weak\"><td>access-control-max-age:</td><td> max-age is "+num+"</td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+        else
+        secureheaders[details.tabId]+="<tr class=\"strong\"><td>access-control-max-age:</td><td> max-age is "+num+"</td><td><i class=\"fa fa-exclamation\"></i></td></tr>";
+    }
 
+
+   
 }
 if(headers[details.tabId].csp===0)
 secureheaders[details.tabId]+="<tr class=\"weak\"><td>Content-Security-Policy:</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
@@ -172,6 +197,11 @@ if(headers[details.tabId].fp===0)
 secureheaders[details.tabId]+="<tr class=\"weak\"><td>feature-policy:</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
 if(headers[details.tabId].ect===0)
 secureheaders[details.tabId]+="<tr class=\"weak\"><td>Expect-ct:</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
+if(headers[details.tabId].acao===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>access-control-allow-origin</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
+if(headers[details.tabId].acma===0)
+secureheaders[details.tabId]+="<tr class=\"weak\"><td>access-control-max-age</td><td> non-existent </td><td> <i class=\"fa fa-exclamation\"></i></td></tr>";
+
 },{urls: ["<all_urls>"],types: ["main_frame"]},["responseHeaders"]);
 
 chrome.tabs.onRemoved.addListener(function(tabId,removeInfo)
