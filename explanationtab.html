@@ -98,12 +98,394 @@ h3,p{
                 <h3>default-src blob:</h3>
                 <p>A Binary Large OBject (BLOB) is a collection of binary data stored as a single entity. Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.Here URL would be the content source.Since it has collection of different file types, sometiomes there could be malicious file injected by the attacker which makes the URL insecure.</p>
                 </div>
-
-                <div id="hstsheader" class="hide">
+        <div id="childeval" class="hide">
+            <div class="divider"></div>
+            <h3>child-src 'unsafe-eval'</h3>
+            <p>child-src directive defines the valid sources for codes that can run in the background without affecting the performance of the page.
+               This value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code.</p>
+            </div>
+        <div id="childhashes" class="hide">
+            <div class="divider"></div>
+            <h3>child-src 'unsafe-hashes'</h3>
+            <p>child-src directive defines the valid sources for codes that can run in the background without affecting the performance of the page.
+               The value 'unsafe-hashes' enables certain conditions which can be exploited when found. </p>
+            </div>
+        <div id="childstar" class="hide">
+            <div class="divider"></div>
+            <h3>child-src '*'</h3>
+            <p>child-src directive defines the valid sources for codes that can run in the background without affecting the performance of the page.
+               This configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+            </div>
+        <div id="childinline" class="hide">
+            <div class="divider"></div>
+            <h3>child-src 'unsafe-inline'</h3>
+            <p>child-src directive defines the valid sources for codes that can run in the background without affecting the performance of the page.
+               It allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.</p>
+            </div>
+        <div id="childdata" class="hide">
+            <div class="divider"></div>
+            <h3>child-src data:</h3>
+            <p>child-src directive defines the valid sources for codes that can run in the background without affecting the performance of the page.
+               This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+            </div>
+        <div id="childblob" class="hide">
+            <div class="divider"></div>
+            <h3>child-src blob:</h3>
+            <p>child-src directive defines the valid sources for codes that can run in the background without affecting the performance of the page.
+               Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+               As per child-src blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+            </p>
+            </div>
+        <div id="connecteval" class="hide">
+            <div class="divider"></div>
+            <h3>connect-src 'unsafe-eval'</h3>
+            <p>The connect-src directive restricts the URLs which can be loaded using script interfaces like ping.
+               The value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code.
+            </p>
+            </div>
+        <div id="connecthashes" class="hide">
+            <div class="divider"></div>
+            <h3>connect-src 'unsafe-hashes'</h3>
+            <p>The connect-src directive restricts the URLs which can be loaded using script interfaces like ping.
+               The value 'unsafe-hashes' enables certain conditions which can be exploited when found. </p>
+            </div>
+        <div id="connectstar" class="hide">
+            <div class="divider"></div>
+            <h3>connect-src '*'</h3>
+            <p>The connect-src directive restricts the URLs which can be loaded using script interfaces like ping.
+               This * configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+            </div>
+        <div id="connectinline" class="hide">
+            <div class="divider"></div>
+            <h3>connect-src 'unsafe-inline'</h3>
+            <p>The connect-src directive restricts the URLs which can be loaded using script interfaces like ping.
+                The value 'unsafe-inline' allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.</p>
+            </div>
+        <div id="connectdata" class="hide">
+            <div class="divider"></div>
+            <h3>connect-src data:</h3>
+            <p>The connect-src directive restricts the URLs which can be loaded using script interfaces like ping.
+               This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+            </div>
+        <div id="connectblob" class="hide">
+            <div class="divider"></div>
+            <h3>connect-src blob:</h3>
+            <p>connect-src directive defines the valid sources for codes that can run in the background without affecting the performance of the page.
+                Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+                As per connect-src blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+            </p>
+            </div>
+        <div id="fonteval" class="hide">
+            <div class="divider"></div>
+            <h3>font-src 'unsafe-eval'</h3>
+            <p>Font-src directive specifies valid sources for fonts loaded.
+               The value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code or make it unreadable.
+            </p>
+            </div>
+        <div id="fonthashes" class="hide">
+            <div class="divider"></div>
+            <h3>font-src 'unsafe-hashes'</h3>
+            <p>Font-src directive specifies valid sources for fonts loaded.
+               The value 'unsafe-hashes' enables certain conditions which can be exploited when found. </p>
+            </div>
+        <div id="fontstar" class="hide">
+            <div class="divider"></div>
+            <h3>font-src '*'</h3>
+            <p>Font-src directive specifies valid sources for fonts loaded.
+               This * configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+            </div>
+        <div id="fontinline" class="hide">
+            <div class="divider"></div>
+            <h3>font-src 'unsafe-inline'</h3>
+            <p>Font-src directive specifies valid sources for fonts loaded.
+               The value 'unsafe-inline' allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.</p>
+            </div>
+        <div id="fontdata" class="hide">
+                <div class="divider"></div>
+                <h3>font-src data:</h3>
+                <p>Font-src directive specifies valid sources for fonts loaded.
+                   This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+                </div>
+        <div id="fontblob" class="hide">
+                <div class="divider"></div>
+                <h3>connect-src blob:</h3>
+                <p>Font-src directive specifies valid sources for fonts loaded.
+                   Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+                   As per font-src blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+                </p>
+                </div>
+        <div id="frameeval" class="hide">
+                <div class="divider"></div>
+                <h3>frame-src 'unsafe-eval'</h3>
+                <p>Frame-src directive specifies the document URL which is used to display in the frame.Syntax: frame src="URL" . This means it contains single value URL which specifies the source of the document.
+                   The value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code or make it unreadable.
+                </p>
+                </div>
+        <div id="framehashes" class="hide">
+            <div class="divider"></div>
+            <h3>frame-src 'unsafe-hashes'</h3>
+            <p>Frame-src directive specifies the document URL which is used to display in the frame.Syntax: frame src="URL" . This means it contains single value URL which specifies the source of the document.
+               The value 'unsafe-hashes' enables certain conditions which can be exploited when found. </p>
+            </div>
+        <div id="framestar" class="hide">
+            <div class="divider"></div>
+            <h3>frame-src '*'</h3>
+            <p>Frame-src directive specifies the document URL which is used to display in the frame.Syntax: frame src="URL" . This means it contains single value URL which specifies the source of the document.
+               This * configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+            </div>
+        <div id="frameinline" class="hide">
+            <div class="divider"></div>
+            <h3>frame-src 'unsafe-inline'</h3>
+            <p>Frame-src directive specifies the document URL which is used to display in the frame.Syntax: frame src="URL" . This means it contains single value URL which specifies the source of the document.
+               The value 'unsafe-inline' allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.</p>
+            </div>
+        <div id="framedata" class="hide">
+                <div class="divider"></div>
+                <h3>frame-src data:</h3>
+                <p>Frame-src directive specifies the document URL which is used to display in the frame.Syntax: frame src="URL" . This means it contains single value URL which specifies the source of the document.
+                   This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+                </div>
+        <div id="frameblob" class="hide">
+                <div class="divider"></div>
+                <h3>frame-src blob:</h3>
+                <p>Frame-src directive specifies the document URL which is used to display in the frame.Syntax: frame src="URL" . This means it contains single value URL which specifies the source of the document.
+                   Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+                   As per frame-src blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+                </p>
+                </div>
+        <div id="imageeval" class="hide">
+                <div class="divider"></div>
+                <h3>img-src 'unsafe-eval'</h3>
+                <p>The img-src directive specifies valid sources of images and favicons. 
+                   The value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code or make it unreadable.
+                </p>
+                </div>
+        <div id="imagehashes" class="hide">
+            <div class="divider"></div>
+            <h3>img-src 'unsafe-hashes'</h3>
+            <p>The img-src directive specifies valid sources of images and favicons.
+               The value 'unsafe-hashes' enables certain conditions which can be exploited when found. </p>
+            </div>
+        <div id="imagestar" class="hide">
+            <div class="divider"></div>
+            <h3>img-src '*'</h3>
+            <p>The img-src directive specifies valid sources of images and favicons.
+               This * configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+            </div>
+        <div id="imageinline" class="hide">
+            <div class="divider"></div>
+            <h3>img-src 'unsafe-inline'</h3>
+            <p>The img-src directive specifies valid sources of images and favicons.
+               The value 'unsafe-inline' allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.
+        <div id="imagedata" class="hide">
+                <div class="divider"></div>
+                <h3>img-src data:</h3>
+                <p>The img-src directive specifies valid sources of images and favicons.
+                   This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+                </div>
+        <div id="imageblob" class="hide">
+                <div class="divider"></div>
+                <h3>img-src blob:</h3>
+                <p>The img-src directive specifies valid sources of images and favicons.
+                   Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+                   As per img-src blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+                </p>
+                </div>
+        <div id="manifesteval" class="hide">
+                <div class="divider"></div>
+                <h3>manifest-src 'unsafe-eval'</h3>
+                <p>manifest-src directive specifies which web applications can be installed to a device's homescreen without an appstore.
+                   The value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code or make it unreadable.
+                </p>
+                </div>
+        <div id="manifesthashes" class="hide">
+                <div class="divider"></div>
+                <h3>manifest-src 'unsafe-hashes'</h3>
+                <p>manifest-src directive specifies which web applications can be installed to a device's homescreen without an appstore.
+                   The value 'unsafe-hashes' enables certain conditions which can be exploited when found. </p>
+                </div>
+        <div id="manifeststar" class="hide">
+            <div class="divider"></div>
+            <h3>manifest-src '*'</h3>
+            <p>manifest-src directive specifies which web applications can be installed to a device's homescreen without an appstore.
+               This * configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+            </div>
+        <div id="manifestinline" class="hide">
+            <div class="divider"></div>
+            <h3>manifest-src 'unsafe-inline'</h3>
+            <p>manifest-src directive specifies which web applications can be installed to a device's homescreen without an appstore.
+               The value 'unsafe-inline' allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.
+        <div id="manifestdata" class="hide">
+            <div class="divider"></div>
+            <h3>manifest-src data:</h3>
+            <p>manifest-src directive specifies which web applications can be installed to a device's homescreen without an appstore.
+               This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+            </div>
+        <div id="manifestblob" class="hide">
+            <div class="divider"></div>
+            <h3>manifest-src blob:</h3>
+            <p>manifest-src directive specifies which web applications can be installed to a device's homescreen without an appstore.
+               Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+               As per manifest-src blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+            </p>
+            </div>
+        <div id="mediaeval" class="hide">
+                <div class="divider"></div>
+                <h3>media-src 'unsafe-eval'</h3>
+                <p>media-src directive specifies valid sources for loading media using the audio and video elements.
+                   The value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code or make it unreadable.
+                </p>
+                </div>
+        <div id="mediahashes" class="hide">
+                <div class="divider"></div>
+                <h3>media-src 'unsafe-hashes'</h3>
+                <p>media-src directive specifies valid sources for loading media using the audio and video elements.
+                   The value 'unsafe-hashes' enables certain conditions which can be exploited when found</p>
+                </div>
+        <div id="mediastar" class="hide">
+            <div class="divider"></div>
+            <h3>media-src '*'</h3>
+            <p>media-src directive specifies valid sources for loading media using the audio and video elements.
+               This * configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+            </div>
+        <div id="mediainline" class="hide">
+            <div class="divider"></div>
+            <h3>media-src 'unsafe-inline'</h3>
+            <p>media-src specifies valid sources for loading media using the audio and video elements.
+               The value 'unsafe-inline' allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.
+        <div id="mediadata" class="hide">
+            <div class="divider"></div>
+            <h3>media-src data:</h3>
+            <p>media-src specifies valid sources for loading media using the audio and video elements.
+               This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+            </div>
+        <div id="mediablob" class="hide">
+            <div class="divider"></div>
+            <h3>media-src blob:</h3>
+            <p>media-src specifies valid sources for loading media using the audio and video elements.
+               Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+               As per manifest-src blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+            </p>
+            </div>
+        <div id="objecteval" class="hide">
+            <div class="divider"></div>
+            <h3>object-src 'unsafe-eval'</h3>
+            <p>object-src directive specifies valid sources like application and the media types and sizes to be allowed.
+                   The value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code or make it unreadable.
+            </p>
+            </div>
+        <div id="objecthashes" class="hide">
+            <div class="divider"></div>
+            <h3>object-src 'unsafe-hashes'</h3>
+            <p>object-src directive specifies valid sources like application and the media types and sizes to be allowed.
+               The value 'unsafe-hashes' enables certain conditions which can be exploited when found</p>
+            </div>
+        <div id="objectstar" class="hide">
+                <div class="divider"></div>
+                <h3>object-src '*'</h3>
+                <p>object-src directive specifies valid sources like application and the media types and sizes to be allowed.
+                   This * configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+                </div>
+        <div id="objectinline" class="hide">
+                <div class="divider"></div>
+                <h3>object-src 'unsafe-inline'</h3>
+                <p>object-src directive specifies valid sources like application and the media types and sizes to be allowed.
+                   The value 'unsafe-inline' allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.
+        <div id="objectdata" class="hide">
+                <div class="divider"></div>
+                <h3>object-src data:</h3>
+                <p>object-src directive specifies valid sources like application and the media types and sizes to be allowed.
+                   This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+                </div>
+        <div id="objectblob" class="hide">
+                <div class="divider"></div>
+                <h3>object-src blob:</h3>
+                <p>object-src directive specifies valid sources like application and the media types and sizes to be allowed.
+                   Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+                   As per manifest-src blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+                </p>
+                </div>
+        <div id="scripteval" class="hide">
+                <div class="divider"></div>
+                <h3>script-src 'unsafe-eval'</h3>
+                <p>script-src is the source from which the website loads its script
+                    The value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code or make it unreadable.
+                </p>
+                </div>
+        <div id="scripthashes" class="hide">
+                <div class="divider"></div>
+                <h3>script-src 'unsafe-hashes'</h3>
+                <p>script-src is the source from which the website loads its script.
+                   The value 'unsafe-hashes' enables certain conditions which can be exploited when found</p>
+                </div>
+        <div id="scriptstar" class="hide">
+                <div class="divider"></div>
+                <h3>script-src '*'</h3>
+                <p>script-src is the source from which the website loads its script.
+                   This * configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+                </div>
+        <div id="scriptinline" class="hide">
+                <div class="divider"></div>
+                <h3>script-src 'unsafe-inline'</h3>
+                <p>script-src is the source from which the website loads its script.
+                   The value 'unsafe-inline' allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.</p>
+        <div id="scriptdata" class="hide">
+                <div class="divider"></div>
+                <h3>script-src data:</h3>
+                <p>script-src is the source from which the website loads its script.
+                   This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+                </div>
+        <div id="scriptblob" class="hide">
+                <div class="divider"></div>
+                <h3>script-src blob:</h3>
+                <p>script-src is the source from which the website loads its script.
+                   Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+                   As per script-src blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+                </p>
+                </div>
+        <div id="frame-ancestorseval" class="hide">
+                <div class="divider"></div>
+                <h3>frame-ancestors 'unsafe-eval'</h3>
+                <p>frame-ancestors are the sources which embeds their own content in other pages
+                The value 'unsafe-eval' allows to create code from strings. This can allow attackers to execute their own, perhaps malicious, code or make it unreadable.
+                </p>
+                </div>
+        <div id="frame-ancestorshashes" class="hide">
+               <div class="divider"></div>
+               <h3>frame-ancestors 'unsafe-hashes'</h3>
+                <p>frame-ancestors are the sources which embeds their own content in other pages
+                   The value 'unsafe-hashes' enables certain conditions which can be exploited when found</p>
+                </div>
+        <div id="frame-ancestorsstar" class="hide">
+                <div class="divider"></div>
+                <h3>frame-ancestors '*'</h3>
+                <p>frame-ancestors are the sources which embeds their own content in other pages.
+                    This * configuration will allow resources (images, scripts, etc) to be loaded from any domain for each resource that isn't specified with sources.</p>
+                </div>
+        <div id="frame-ancestorsinline" class="hide">
+                <div class="divider"></div>
+                <h3> frame-ancestors 'unsafe-inline'</h3>
+                <p>frame-ancestors are the sources which embeds their own content in other pages.
+                   The value 'unsafe-inline' allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.</p>
+        <div id="frame-ancestorsdata" class="hide">
+                <div class="divider"></div>
+                <h3>frame-ancestors data:</h3>
+                <p>Frame-ancestors are the sources which embeds their own content in other pages.
+                   This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's</p>
+                </div>
+        <div id="frame-ancestorsblob" class="hide">
+                <div class="divider"></div>
+                <h3>frame-ancestors blob:</h3>
+                <p>Frame-ancestors are the sources which embeds their own content in other pages.
+                   Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.
+                   As per frame-ancestors blob:, URL would be the content source.Since it has collection of different file types, sometimes there could be malicious file injected by the attacker which makes the URL insecure.
+                </p>
+                </div>
+        <div id="hstsheader" class="hide">
                     <div class="divider"></div>
                     <center><h2>HTTP Strict Transport Security</h2></center>
                     </div>
-                <div id="hstsmiss" class="hide">
+            <div id="hstsmiss" class="hide">
                     <div class="divider"></div>
                     <h3>Missing HSTS Header</h3>
                     <p>The lack of a HSTS header implies that the website could be loaded over HTTP instead of HTTPS. This could allow an attacker to read any information transferred between you and the website.</p>
