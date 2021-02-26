@@ -21,6 +21,7 @@ h3,p{
     margin-top: 20px;
     margin-bottom: 20px;
     margin-left: 5%;
+    margin-right: 5%;
     font-weight: bold;
 }
 .hide{
@@ -28,6 +29,25 @@ h3,p{
 }
 .show{
     display: block;
+}
+.centrebutton{
+    margin-left:45%;
+  position: absolute;
+  background-color: white; /* Green */
+  border: none;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  border: 2px solid black;
+}
+.centrebutton:hover{
+    background-color: #3e8e41;
+    color:white;
 }
 </style>
 <link rel="stylesheet" href="share.min.css">
@@ -37,6 +57,11 @@ h3,p{
  <centre><h2 id="urlhere"></h2></centre>
 </div>
 <div id ="fill">
+    <div id="cspmiss" class="hide">
+        <div class="divider"></div>
+        <h3>Missing Control-Security-Policy Header</h3>
+        <p>The lack of a Control-Security-Policy means that resources such as images, scripts, and videos may be loaded from any source even a malicious one. This is obviously very unsafe.</p>
+        </div>
         <div id="defaulteval" class="hide">
         <div class="divider"></div>
         <h3>default-src 'unsafe-eval'</h3>
@@ -55,13 +80,86 @@ h3,p{
         </div>
         <div id="defaultinline" class="hide">
             <div class="divider"></div>
-            <h3>default-src 'unsafe-Inline':</h3>
+            <h3>default-src 'unsafe-Inline'</h3>
             <p>It allows inline resources such as script tags and styles. Inline code is not recommended as it is used to add malicious code by attackers.</p>
             </div>
+            <div id="defaultdata" class="hide">
+                <div class="divider"></div>
+                <h3>default-src data:</h3>
+                <p>This allows data: and URI's are to be used as a content source. This is insecure as an attacker can inject malicious data: URI's </p>
+                </div>
+                <div id="defaultblob" class="hide">
+                <div class="divider"></div>
+                <h3>default-src blob:</h3>
+                <p>A Binary Large OBject (BLOB) is a collection of binary data stored as a single entity. Blobs are typically images, audio or other multimedia objects, though sometimes binary executable code is stored as a blob.Here URL would be the content source.Since it has collection of different file types, sometiomes there could be malicious file injected by the attacker which makes the URL insecure.</p>
+                </div>
+
+                <div id="hstsmiss" class="hide">
+                    <div class="divider"></div>
+                    <h3>Missing HSTS Header</h3>
+                    <p>The lack of a HSTS header implies that the website could be loaded over HTTP instead of HTTPS. This could allow an attacker to read any information transferred between you and the website.</p>
+                    </div>
+            <div id="hstsmax0" class="hide">
+                <div class="divider"></div>
+                <h3>max-age=0</h3>
+                <p>It means the browser should remember that the website must only be accessed over https for 0 seconds. This makes the HSTS header invalid and is ignored.</p>
+                </div>
+                <div id="hstsmax1" class="hide">
+                    <div class="divider"></div>
+                    <h3>max-age not defined</h3>
+                    <p>The max-age is not defined, this is an invalid configuration of the HSTS header.</p>
+                    </div>
+
+                    <div id="xssmiss" class="hide">
+                        <div class="divider"></div>
+                            <h3>XSS Header Missing</h3>
+                            <p>This header is responsible for setting up a filter that protects against XSS attacks. It is not present in the headers for this site.</p>
+                            </div>
+            <div id="xsspro" class="hide">
+                    <div class="divider"></div>
+                        <h3>XSS filter off</h3>
+                        <p>This setting turns off the XSS filter in the browser exposing the site to XSS attacks if a vulnerability is present.</p>
+                        </div>
+        
+                        <div id="xframe" class="hide">
+                            <div class="divider"></div>
+                                <h3>X-Frame-Options not present</h3>
+                                <p>This header prevents this page from loading inside another website (maybe even one that mimics this website). By not using this header this website can be loaded inside another website.</p>
+                                </div>
+
+                                <div id="xcontent" class="hide">
+                                    <div class="divider"></div>
+                                        <h3>X-Content-Type-Options missing nosniff</h3>
+                                        <p>This option is configured insecurely and will allow attackers to try and identify the type of loaded resources (images, scripts, etc). With this information an attacker might </p>
+                                        </div>
+
+                                        <div id="owco" class="hide">
+                                            <div class="divider"></div>
+                                                <h3>Origin-when-cross-origin</h3>
+                                                <p>This option sends the current url (without parameters) to a new domain if it is accessed through the first domain. This will not leak sensitive information to other domains but may allow user tracking.</p>
+                                                </div>
+
+                                                <div id="referrerurl" class="hide">
+                                                    <div class="divider"></div>
+                                                        <h3>Unsafe-URL</h3>
+                                                        <p>This option sends the current url (with parameters) to a new domain if it is accessed through the first domain. This could leak sensitive information to other domains.</p>
+                                                        </div>
+
+                                                        <div id="featurepol" class="hide">
+                                                            <div class="divider"></div>
+                                                                <h3>Feature-Policy *</h3>
+                                                                <p>This header allows all resources and iframes within this page to have access to system devices such as microphone and camera.</p>
+                                                                </div>
+
+                                                                <div id="acma" class="hide">
+                                                                    <div class="divider"></div>
+                                                                        <h3>Max-age set to greater than 30 minutes</h3>
+                                                                        <p>This configuration caches data for longer than 30 minutes. This is a risk as an attacker may gain access to that data before it is changed, granting them access to the site.</p>
+                                                                        </div>
 </div>
 <div>
     <div class="divider"></div>
-    <button class="good-share" data-share-title="Weak Security Headers" data-share-text="Here the text will be.">
+    <button class="good-share centrebutton" data-share-title="Weak Security Headers" data-share-text="Here the text will be.">
         Share These Results
       </button>
 </div>
