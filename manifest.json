@@ -1,23 +1,26 @@
 {
-"name":"HTTP security headers",
-"description": "Should examine the response headers and warn the user whether site is secure or not",
-"browser_action": {
-"default_popup": "popup.html"
-},
-"version":"1.0",
-"permissions":["webRequest", "tabs", "storage", "downloads", "notifications", "*://*/*"],
-"icons": {
+  "name": "HTTP Security Headers",
+  "version": "1.0",
+  "description": "Checks whether security headers are present and configured securely.",
+  "browser_action": {
+   "default_icon":  {
       "48": "48.png",
       "96": "96.png"
   },
-"background":{
-      "scripts":["background.js"]
-},
-"manifest_version":2
+   "default_popup": "popup.html"
+  },
+  "permissions": [
+  "background",
+	"activeTab",
+    "webRequest",
+	"downloads",
+	"notifications",
+	"tabs",
+    "*://*/*"
+  ],
+  "manifest_version": 2,
+  "background":{
+  "scripts":["background.js"],
+  "persistent":true
+  }
 }
-
-
-
-
-
-
